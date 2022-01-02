@@ -5,17 +5,17 @@ spring:
     gateway:
       routes:
       - id: users-status
-        uri: http://localhost:8065/users/status/check
+        uri: lb://resource-server
         predicates:
           - Path=/users/status/check
           - Method=GET
         filters:
           - RemoveRequestHeader=Cookie
       - id: albums
-        uri: http://localhost:8023/albums
+        uri: lb://albums
         predicates:
           - Path=/albums
-          - Method=GET\
+          - Method=GET
         filters:
           - RemoveRequestHeader=Cookie
   application:
