@@ -22,6 +22,7 @@
 		<module>albums</module>
 		<module>apii-gateway</module>
 		<module>discovery-service</module>
+        <module>photo-app-web-client</module>
 	</modules>
     <dependencies>
         <dependency>
