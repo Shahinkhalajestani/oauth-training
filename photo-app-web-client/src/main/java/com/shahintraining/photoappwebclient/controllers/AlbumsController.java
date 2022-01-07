@@ -1,6 +1,9 @@
 package com.shahintraining.photoappwebclient.controllers;
 
 import com.shahintraining.photoappwebclient.response.Album;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +15,16 @@ public class AlbumsController {
 
 
     @GetMapping("/albums")
-    public String getAlbums(Model model) {
+    public String getAlbums(Model model, @AuthenticationPrincipal OidcUser principal) {
+
+        System.out.println("Princibal ="+principal);
+
+        OidcIdToken idToken = principal.getIdToken();
+
+        String tokenValue = idToken.getTokenValue();
+
+        System.out.println("token value ="+tokenValue);
+
         Album album1 = Album.builder().albumId("1")
                 .albumUrl("http://localhost:8026/albums/1")
                 .userId("shahin1")
