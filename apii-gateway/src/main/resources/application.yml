@@ -18,6 +18,13 @@ spring:
           - Method=GET
         filters:
           - RemoveRequestHeader=Cookie
+      - id: photo-client
+        uri: lb://photo-app-web-client
+        predicates:
+          - Path=/albums
+          - Method=GET
+        filters:
+          - RemoveRequestHeader=Cookie
   application:
     name: gateway
 eureka:
