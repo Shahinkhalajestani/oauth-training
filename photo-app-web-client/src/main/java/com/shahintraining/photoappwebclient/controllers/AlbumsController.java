@@ -2,6 +2,11 @@ package com.shahintraining.photoappwebclient.controllers;
 
 import com.shahintraining.photoappwebclient.response.Album;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +18,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -22,6 +28,9 @@ public class AlbumsController {
 
     @Autowired
     private OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @GetMapping("/albums")
     public String getAlbums(Model model, @AuthenticationPrincipal OidcUser principal) {
@@ -46,25 +55,19 @@ public class AlbumsController {
 
         System.out.println("token value =" + tokenValue);
 
-        Album album1 = Album.builder().albumId("1")
-                .albumUrl("http://localhost:8026/albums/1")
-                .userId("shahin1")
-                .albumDescription("first Photo album")
-                .albumTitle("number one").build();
+        String url = "http://localhost:8095/albums";
 
-        Album album2 = Album.builder().albumId("1")
-                .albumUrl("http://localhost:8026/albums/2")
-                .userId("shahin2")
-                .albumDescription("second Photo album")
-                .albumTitle("number two").build();
+        HttpHeaders headers = new HttpHeaders();
 
-        Album album3 = Album.builder().albumId("3")
-                .albumUrl("http://localhost:8026/albums/3")
-                .userId("shahin3")
-                .albumDescription("third Photo album")
-                .albumTitle("number three").build();
-        List<Album> albums = List.of(album1, album2, album3);
-        model.addAttribute("albums", albums);
+        headers.set("Authorization","Bearer "+jwtAccessToken);
+        
+        HttpEntity<List<Album>> requestEntity = new HttpEntity<>(headers);
+
+
+        ResponseEntity<List<Album>> responseEntity = restTemplate
+                .exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Album>>() {
+        });
+        model.addAttribute("albums", responseEntity.getBody());
         return "albums";
     }
 

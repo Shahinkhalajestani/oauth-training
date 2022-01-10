@@ -21,10 +21,11 @@ spring:
       - id: photo-client
         uri: lb://photo-app-web-client
         predicates:
-          - Path=/albums
+          - Path=/client/albums
           - Method=GET
         filters:
           - RemoveRequestHeader=Cookie
+          - RewritePath=/client/albums, /albums
   application:
     name: gateway
 eureka:
