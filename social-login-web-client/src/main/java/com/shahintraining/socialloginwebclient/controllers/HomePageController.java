@@ -12,7 +12,7 @@ public class HomePageController {
     @GetMapping("/home")
     public String displayHomePage(Model model, @AuthenticationPrincipal OAuth2User principal){
         if (principal != null){
-            String name = principal.getName();
+            String name = principal.getAttribute("name");
             model.addAttribute("name",name);
         }
         return  "home";
