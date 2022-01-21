@@ -2,9 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function generateState(length) {
+            var stateValue = "";
+            var alphaNumericCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvyxyz0123456789';
+            var alphaNumericCharactersLength = alphaNumericCharacters.length;
+            for (var i = 0; i < length; i++) {
+                stateValue += alphaNumericCharacters.charAt(Math.floor(Math.random() * alphaNumericCharactersLength))
+            }
+            document.getElementById("stateValue").innerHTML = stateValue;
+        }
+    </script>
     <title>JavaScript application with PKCE</title>
 </head>
 <body>
 <h1>index Page</h1>
+
+<div id="stateValue"></div>
+<div><input type="button" value="Generate State Value" onclick="generateState(30)"></div>
+
 </body>
 </html>
