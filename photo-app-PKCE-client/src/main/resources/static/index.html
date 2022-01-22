@@ -35,6 +35,22 @@
             codeChallengeValue = base64urlencode(Array.from(new Uint8Array(digest)));
             document.getElementById("codeChallengeValue").innerHTML = codeChallengeValue;
         }
+
+        function getAuthCode() {
+            var state = document.getElementById("stateValue").innerHTML;
+            var codeChallenge = document.getElementById("codeChallengeValue").innerHTML;
+            var authorizationURL = "ttp://localhost:8080/auth/realms/shahinTraining/protocol/openid-connect/auth";
+            authorizationURL += "?client_id=photo-app-PKCE-client";
+            authorizationURL += "&response_type=code";
+            authorizationURL += "&scope=openid";
+            authorizationURL += "&redirect_uri=http://localhost:8181/authcodeReader.html";
+            authorizationURL += "&state="+state;
+            authorizationURL += "&code_challenge="+codeChallenge;
+            authorizationURL += "&code_challenge_method=S256";
+
+            window.open(authorizationURL+'authorizationRequestWindow','width=800,height=600,left=200,top=200');
+        }
+
     </script>
     <title>JavaScript application with PKCE</title>
 </head>
@@ -47,5 +63,7 @@
 <div><input type="button" value="Generate Code Verifier Value" onclick="generateCodeVerifier()"></div>
 <div id="codeChallengeValue"></div>
 <div><input type="button" value="Generate Code Challenge Value" onclick="generateCodeChallenge()"></div>
+<br/>
+<div><input type="button" value="Get Auth Code" onclick="getAuthCode()"></div>
 </body>
 </html>
