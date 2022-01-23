@@ -90,6 +90,25 @@
             }
         }
 
+        function getInfoFromResourceServer(){
+            let accessToken = document.getElementById("accessToken").innerHTML;
+            $.ajax({
+                beforeSend: function (request) {
+                    request.setRequestHeader("Content-type","applicaiton/x-www-form-urlencoded; chatset=UTF-8");
+                    request.setRequestHeader("Authorization","Bearer "+accessToken);
+                },
+                type: "GET",
+                url: "http://localhost:8095/users/status/check",
+                success: postInfoFromAccessToken,
+                dataType: "text"
+            });
+        }
+
+        function postInfoFromAccessToken(data,status,jqXHR){
+            alert(data);
+        }
+
+
     </script>
     <title>JavaScript application with PKCE</title>
 </head>
@@ -105,5 +124,6 @@
 <br/>
 <div><input type="button" value="Get Auth Code" onclick="getAuthCode()"></div>
 <p>Access Token: <span id="accessToken"></span></p>
+<div><input type="button" value="Get Info From Resource Server" onclick="getInfoFromResourceServer()"></div>
 </body>
 </html>
