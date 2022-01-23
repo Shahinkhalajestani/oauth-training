@@ -54,8 +54,40 @@
             window.open(authorizationURL,'authorizationRequestWindow', 'width=800,height=600,left=200,top=200');
         }
 
+        function requestTokens(authCode) {
+            let codeVerifier= document.getElementById("codeVerifierValue").innerHTML;
+            let data ={
+                "grant_type":"authorization_code",
+                "client_id":"photo-app-PKCE-client",
+                "code":authCode,
+                "code_verifier":codeVerifier,
+                "redirect_uri":"http://localhost:8181/authcodeReader.html"
+            };
+
+            $.ajax({
+                beforeSend: function (request) {{}
+                    request.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
+                },
+                type: "POST",
+                url: "http://localhost:8080/auth/realms/shahinTraining/protocol/openid-connect/token",
+                data: data,
+                success: postRequestAccessToken,
+                dataType: "json"
+            });
+
+        }
+
+        function postRequestAccessToken(data, status, jqXHR) {
+            document.getElementById("accessToken").innerHTML = data["access_token"];
+        }
+
         function postAuthorize(state, authCode) {
-            alert("State = "+state+", authCode = "+ authCode);
+            let originalStateValue = document.getElementById("stateValue").innerHTML
+            if (state === originalStateValue){
+                requestTokens(authCode);
+            }else {
+                alert("invalid state value received");
+            }
         }
 
     </script>
@@ -72,5 +104,6 @@
 <div><input type="button" value="Generate Code Challenge Value" onclick="generateCodeChallenge()"></div>
 <br/>
 <div><input type="button" value="Get Auth Code" onclick="getAuthCode()"></div>
+<p>Access Token: <span id="accessToken"></span></p>
 </body>
 </html>
