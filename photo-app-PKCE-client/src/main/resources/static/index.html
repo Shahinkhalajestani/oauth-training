@@ -42,7 +42,7 @@
         function getAuthCode() {
             var state = document.getElementById("stateValue").innerHTML;
             var codeChallenge = document.getElementById("codeChallengeValue").innerHTML;
-            var authorizationURL = "ttp://localhost:8080/auth/realms/shahinTraining/protocol/openid-connect/auth";
+            var authorizationURL = "http://localhost:8080/auth/realms/shahinTraining/protocol/openid-connect/auth";
             authorizationURL += "?client_id=photo-app-PKCE-client";
             authorizationURL += "&response_type=code";
             authorizationURL += "&scope=openid";
